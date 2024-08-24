@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/indexer/Dockerfile
+      args:
+        - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
+    environment:
+      - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
+    volumes:
+      - ./data:/app/data
+      - ./scripts/indexer.py:/app/indexer.py  # Прокидываем indexer.py в контейнер
+    depends_on:
+      - elasticsearch
+
+volumes:
+  esdata:
+    driver: local
+
+
+
+
+

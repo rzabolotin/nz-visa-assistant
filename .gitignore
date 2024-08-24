@@ -1,0 +1,6 @@
+.idea
+.ipynb_checkpoints
+.env
+.obsidian
+**/ollama_data
+**/data
