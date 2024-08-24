@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse, urldefrag
 import json
+import os
 
 # Константа для ограничения количества обрабатываемых страниц
 MAX_PAGES = 10000
@@ -98,7 +99,13 @@ def parse_site_content(start_url):
 
 
 def save_to_json(data, filename):
-    with open(filename, 'w', encoding='utf-8') as f:
+    # Ensure the data directory exists
+    os.makedirs('data', exist_ok=True)
+    
+    # Create the full path for the file
+    filepath = os.path.join('data', filename)
+    
+    with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
@@ -114,6 +121,6 @@ if __name__ == "__main__":
 
     print(f"\nВсего проанализировано уникальных страниц с содержимым: {len(content)}")
 
-    # Сохраняем результаты в JSON файл
+    # Сохраняем результаты в JSON файл в папке data
     save_to_json(content, 'site_content.json')
-    print(f"\nРезультаты сохранены в файл 'site_content.json'")
+    print(f"\nРезультаты сохранены в файл 'data/site_content.json'")
