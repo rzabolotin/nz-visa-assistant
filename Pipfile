@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+elasticsearch = "*"
+sentence-transformers = "*"
+
+[dev-packages]
+jupyter = "*"
+pandas = "*"
+matplotlib = "*"
+aider-chat = "*"
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.5"
