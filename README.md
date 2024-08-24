@@ -52,6 +52,15 @@ Current status: In progress
 
 This will start Elasticsearch and the indexer application.
 
+### Parsing Data
+
+To parse data run the following command:
+```
+python scripts/parser-v2.py
+```
+
+data will be saved to working directory, you need to move it to `./data` directory
+
 ### Indexing Data
 
 To index the scraped data:
