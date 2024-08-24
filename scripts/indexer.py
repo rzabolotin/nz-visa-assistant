@@ -85,28 +85,6 @@ def index_document(filename):
     print(f"Indexed {len(data)} documents with a total of {total_chunks} chunks from {filename}")
 
 
-def index_document(filename):
-    create_index()  # Ensure index exists before indexing
-
-    with open(filename, 'r') as f:
-        data = json.load(f)
-
-    for url, doc in data.items():
-        header = doc['header']
-        content = doc['main_content']
-        vector = model.encode(header + " " + content)
-
-        index_doc = {
-            'url': url,
-            'header': header,
-            'content': content,
-            'vector': vector.tolist()
-        }
-
-        es.index(index=INDEX_NAME, body=index_doc, id=url)
-        print(f"Indexed: {url}")
-
-    print(f"Indexed {len(data)} documents from {filename}")
 
 
 def search(prompt):
