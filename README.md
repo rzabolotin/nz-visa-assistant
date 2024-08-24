@@ -13,6 +13,7 @@ Current status: In progress
 ### Tasks
 - [x] Implement a web scraper to download data from the immigration website and create a JSON file
 - [x] Set up docker-compose configuration for building images for indexing and searching
+- [x] Implement command-line argument for custom output filename in parser script
 - [ ] Implement indexing data from the JSON file to Elasticsearch
 - [ ] Implement a search algorithm for efficient information retrieval
 - [ ] Integrate RAG (Retrieval-Augmented Generation) using Anthropic's LLM
@@ -54,12 +55,19 @@ This will start Elasticsearch and the indexer application.
 
 ### Parsing Data
 
-To parse data run the following command:
+To parse data, run the following command:
 ```
-python scripts/parser-v2.py
+python scripts/parser-v2.py [-o OUTPUT_FILENAME]
 ```
 
-data will be saved to working directory, you need to move it to `./data` directory
+For example:
+```
+python scripts/parser-v2.py -o custom_output.json
+```
+
+If no output filename is specified, it will default to 'site_content.json'.
+
+The parsed data will be automatically saved in the `./data` directory.
 
 ### Indexing Data
 
