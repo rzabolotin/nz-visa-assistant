@@ -56,7 +56,10 @@ def chunk_content(content, chunk_size=2000, overlap=100):
 def index_document(filename):
     create_index()  # Ensure index exists before indexing
 
-    with open(filename, 'r') as f:
+    # Construct the full path
+    full_path = os.path.join('/app/data', filename)
+
+    with open(full_path, 'r') as f:
         data = json.load(f)
 
     total_chunks = 0
@@ -127,6 +130,7 @@ if __name__ == "__main__":
     if command == 'index':
         if len(sys.argv) != 3:
             print("Usage: python indexer.py index filename")
+            print("Note: The file should be in the /app/data directory.")
             sys.exit(1)
         index_document(sys.argv[2])
     elif command == 'search':
