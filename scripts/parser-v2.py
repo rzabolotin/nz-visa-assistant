@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse, urldefrag
 import json
 import os
+import argparse
 
 # Константа для ограничения количества обрабатываемых страниц
 MAX_PAGES = 10
@@ -110,6 +111,11 @@ def save_to_json(data, filename):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Parse website content and save to JSON.")
+    parser.add_argument("-o", "--output", default="site_content.json",
+                        help="Output filename (default: site_content.json)")
+    args = parser.parse_args()
+
     start_url = "https://www.immigration.govt.nz/new-zealand-visas"
     content = parse_site_content(start_url)
 
@@ -122,5 +128,5 @@ if __name__ == "__main__":
     print(f"\nВсего проанализировано уникальных страниц с содержимым: {len(content)}")
 
     # Сохраняем результаты в JSON файл в папке data
-    save_to_json(content, 'site_content.json')
-    print(f"\nРезультаты сохранены в файл 'data/site_content.json'")
+    save_to_json(content, args.output)
+    print(f"\nРезультаты сохранены в файл 'data/{args.output}'")
