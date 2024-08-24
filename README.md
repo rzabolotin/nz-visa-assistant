@@ -37,7 +37,7 @@ Current status: In progress
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone https://github.com/rzabolotin/nz-visa-assistant.git
    cd <repository-directory>
    ```
 
@@ -55,7 +55,7 @@ This will start Elasticsearch and the indexer application.
 
 ### Parsing Data
 
-To parse data, run the following command:
+Before indexing, you need to parse the website data. Run:
 ```
 python scripts/parser-v2.py [-o OUTPUT_FILENAME]
 ```
@@ -66,7 +66,6 @@ python scripts/parser-v2.py -o custom_output.json
 ```
 
 If no output filename is specified, it will default to 'site_content.json'.
-
 The parsed data will be automatically saved in the `./data` directory.
 
 ### Indexing Data
@@ -82,6 +81,8 @@ To index the scraped data:
 
 Replace `your_data_file.json` with the actual name of your JSON file.
 
+3. You should see output indicating the indexing progress and completion.
+
 ### Running a Search
 
 To perform a search:
@@ -96,6 +97,14 @@ Replace "Your search query here" with the actual question or query you want to s
 
 If you need to clear the index:
 
+The search will return the top 5 most relevant results, showing:
+- The URL of the page
+- The chunk index (if applicable)
+- The relevance score
+- A snippet of the content
+
 ```
 docker-compose run app python indexer.py flush
 ```
+
+This will delete the entire 'website_content' index from Elasticsearch.
