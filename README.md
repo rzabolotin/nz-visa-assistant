@@ -76,12 +76,14 @@ To index the scraped data:
 
 2. Run the indexing command:
    ```
-   docker-compose run app python indexer.py index /app/data/your_data_file.json
+   docker-compose run app python indexer.py index your_data_file.json
    ```
 
 Replace `your_data_file.json` with the actual name of your JSON file.
 
 3. You should see output indicating the indexing progress and completion.
+
+Note: The indexer automatically looks for files in the `/app/data` directory within the container, which is mapped to the `./data` directory on your host machine.
 
 ### Running a Search
 
