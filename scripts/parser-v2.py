@@ -5,7 +5,7 @@ import json
 import os
 
 # Константа для ограничения количества обрабатываемых страниц
-MAX_PAGES = 10000
+MAX_PAGES = 10
 
 
 def get_domain(url):
