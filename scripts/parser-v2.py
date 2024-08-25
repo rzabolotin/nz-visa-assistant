@@ -5,9 +5,6 @@ import json
 import os
 import argparse
 
-# Константа для ограничения количества обрабатываемых страниц
-MAX_PAGES = 10
-
 
 def get_domain(url):
     return urlparse(url).netloc
@@ -53,13 +50,13 @@ def extract_main_content(soup):
     return ""
 
 
-def parse_site_content(start_url):
+def parse_site_content(start_url, max_pages):
     domain = get_domain(start_url)
     visited = set()
     to_visit = [start_url]
     site_content = {}
 
-    while to_visit and len(visited) < MAX_PAGES:
+    while to_visit and len(visited) < max_pages:
         current_url = to_visit.pop(0)
         current_url = normalize_url(current_url)
 
@@ -114,10 +111,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parse website content and save to JSON.")
     parser.add_argument("-o", "--output", default="site_content.json",
                         help="Output filename (default: site_content.json)")
+    parser.add_argument("-m", "--max-pages", type=int, default=100,
+                        help="Maximum number of pages to parse (default: 100)")
     args = parser.parse_args()
 
     start_url = "https://www.immigration.govt.nz/new-zealand-visas"
-    content = parse_site_content(start_url)
+    content = parse_site_content(start_url, args.max_pages)
 
     print("\nСодержимое сайта:")
     for url, page_content in content.items():
