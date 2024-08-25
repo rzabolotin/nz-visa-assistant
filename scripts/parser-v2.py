@@ -50,13 +50,13 @@ def extract_main_content(soup):
     return ""
 
 
-def parse_site_content(start_url, max_pages):
+def parse_site_content(start_url, max_pages=None):
     domain = get_domain(start_url)
     visited = set()
     to_visit = [start_url]
     site_content = {}
 
-    while to_visit and len(visited) < max_pages:
+    while to_visit and (max_pages is None or len(visited) < max_pages):
         current_url = to_visit.pop(0)
         current_url = normalize_url(current_url)
 
@@ -111,14 +111,22 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parse website content and save to JSON.")
     parser.add_argument("-o", "--output", default="site_content.json",
                         help="Output filename (default: site_content.json)")
-    parser.add_argument("-m", "--max-pages", type=int, default=100,
-                        help="Maximum number of pages to parse (default: 100)")
+    parser.add_argument("-m", "--max-pages", type=int, default=None,
+                        help="Maximum number of pages to parse (default: no limit)")
+    parser.add_argument("--parse-all", action="store_true",
+                        help="Parse all pages without limit")
     args = parser.parse_args()
 
     start_url = "https://www.immigration.govt.nz/new-zealand-visas"
-    content = parse_site_content(start_url, args.max_pages)
+    
+    if args.parse_all:
+        content = parse_site_content(start_url)
+    else:
+        content = parse_site_content(start_url, args.max_pages)
 
     print("\nСодержимое сайта:")
+    if args.max_pages and len(content) >= args.max_pages:
+        print(f"\nWARNING: Max pages limit ({args.max_pages}) reached. Some pages may not have been parsed.")
     for url, page_content in content.items():
         print(f"\n{url}")
         print(f"Заголовок: {page_content['header'][:100]}...")
