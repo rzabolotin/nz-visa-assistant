@@ -111,8 +111,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parse website content and save to JSON.")
     parser.add_argument("-o", "--output", default="site_content.json",
                         help="Output filename (default: site_content.json)")
-    parser.add_argument("-m", "--max-pages", type=int, default=None,
-                        help="Maximum number of pages to parse (default: no limit)")
+    parser.add_argument("-m", "--max-pages", type=int, default=100,
+                        help="Maximum number of pages to parse (default:100)")
     parser.add_argument("--parse-all", action="store_true",
                         help="Parse all pages without limit")
     args = parser.parse_args()

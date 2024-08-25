@@ -14,8 +14,8 @@ Current status: In progress
 - [x] Implement a web scraper to download data from the immigration website and create a JSON file
 - [x] Set up docker-compose configuration for building images for indexing and searching
 - [x] Implement command-line argument for custom output filename in parser script
-- [ ] Implement indexing data from the JSON file to Elasticsearch
-- [ ] Implement a search algorithm for efficient information retrieval
+- [x] Implement indexing data from the JSON file to Elasticsearch
+- [x] Implement a search algorithm for efficient information retrieval
 - [ ] Integrate RAG (Retrieval-Augmented Generation) using Anthropic's LLM
 - [ ] Develop and deploy a Telegram chatbot interface
 - [ ] Add License information
