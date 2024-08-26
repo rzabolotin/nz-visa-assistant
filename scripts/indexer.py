@@ -145,7 +145,7 @@ Answer:"""
     # Use Anthropic API to generate answer
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
     response = client.completions.create(
-        model="claude-2",
+        model="claude-3-5-sonnet-20240620",
         max_tokens_to_sample=300,
         prompt=prompt
     )
