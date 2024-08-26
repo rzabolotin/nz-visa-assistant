@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 elasticsearch = "*"
 sentence-transformers = "*"
+anthropic = "*"
 
 [dev-packages]
 jupyter = "*"

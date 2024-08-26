@@ -3,6 +3,7 @@ import sys
 import os
 from elasticsearch import Elasticsearch, exceptions
 from sentence_transformers import SentenceTransformer
+import anthropic
 
 # Initialize Elasticsearch client
 es = Elasticsearch(['http://elasticsearch:9200'])
@@ -90,7 +91,7 @@ def index_document(filename):
 
 
 
-def search(prompt):
+def search(prompt, return_results=False):
     query_vector = model.encode(prompt).tolist()
 
     search_query = {
@@ -107,6 +108,9 @@ def search(prompt):
 
     results = es.search(index=INDEX_NAME, body=search_query, size=5)
 
+    if return_results:
+        return [{'url': hit['_source']['url'], 'content': hit['_source']['content']} for hit in results['hits']['hits']]
+
     print(f"Search results for: '{prompt}'")
     for hit in results['hits']['hits']:
         print(f"URL: {hit['_source']['url']} (Chunk: {hit['_source'].get('chunk_index', 'N/A')})")
@@ -119,10 +123,38 @@ def flush_index():
     es.indices.delete(index='website_content', ignore=[404])
     print("Index 'website_content' has been deleted.")
 
+def answer_visa_question(question):
+    # Search for relevant context
+    search_results = search(question, return_results=True)
+    
+    # Prepare context from search results
+    context = "\n\n".join([f"URL: {result['url']}\nContent: {result['content']}" for result in search_results])
+    
+    # Prepare prompt for Anthropic
+    prompt = f"""You're a smart assistant that can answer questions about getting visas in New Zealand. 
+Use the following context to answer the user's question. If you can't find the answer in the context, 
+say you don't have enough information to answer accurately.
+
+Context:
+{context}
+
+User's question: {question}
+
+Answer:"""
+
+    # Use Anthropic API to generate answer
+    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+    response = client.completions.create(
+        model="claude-2",
+        max_tokens_to_sample=300,
+        prompt=prompt
+    )
+    
+    print(response.completion)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python indexer.py [index filename|search prompt|flush]")
+        print("Usage: python indexer.py [index filename|search prompt|flush|answer question]")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -140,6 +172,11 @@ if __name__ == "__main__":
         search(" ".join(sys.argv[2:]))
     elif command == 'flush':
         flush_index()
+    elif command == 'answer':
+        if len(sys.argv) < 3:
+            print("Usage: python indexer.py answer 'your question about NZ visas'")
+            sys.exit(1)
+        answer_visa_question(" ".join(sys.argv[2:]))
     else:
-        print("Unknown command. Use 'index', 'search', or 'flush'.")
+        print("Unknown command. Use 'index', 'search', 'flush', or 'answer'.")
         sys.exit(1)
