@@ -22,7 +22,7 @@ def should_skip_url(url):
 
 def extract_text_from_element(element):
     if element:
-        # Рекурсивно извлекаем текст из всех дочерних элементов
+        # Recursively extract text from all child elements
         texts = []
         for child in element.descendants:
             if isinstance(child, str) and child.strip():
@@ -30,7 +30,7 @@ def extract_text_from_element(element):
             elif child.name == 'br':
                 texts.append('\n')
 
-        # Объединяем все тексты
+        # Join all texts
         return ' '.join(texts)
     return ""
 
@@ -63,7 +63,7 @@ def parse_site_content(start_url, max_pages=None):
         if current_url in visited or is_pdf_link(current_url):
             continue
 
-        print(f"Парсинг: {current_url}")
+        print(f"Parsing: {current_url}")
         visited.add(current_url)
 
         try:
@@ -91,7 +91,7 @@ def parse_site_content(start_url, max_pages=None):
                     to_visit.append(full_url)
 
         except Exception as e:
-            print(f"Ошибка при парсинге {current_url}: {e}")
+            print(f"Error parsing {current_url}: {e}")
 
     return site_content
 
@@ -124,16 +124,16 @@ if __name__ == "__main__":
     else:
         content = parse_site_content(start_url, args.max_pages)
 
-    print("\nСодержимое сайта:")
+    print("\nSite content:")
     if args.max_pages and len(content) >= args.max_pages:
         print(f"\nWARNING: Max pages limit ({args.max_pages}) reached. Some pages may not have been parsed.")
     for url, page_content in content.items():
         print(f"\n{url}")
-        print(f"Заголовок: {page_content['header'][:100]}...")
-        print(f"Основной контент (первые 200 символов): {page_content['main_content'][:200]}...")
+        print(f"Header: {page_content['header'][:100]}...")
+        print(f"Main content (first 200 characters): {page_content['main_content'][:200]}...")
 
-    print(f"\nВсего проанализировано уникальных страниц с содержимым: {len(content)}")
+    print(f"\nTotal unique pages analyzed with content: {len(content)}")
 
-    # Сохраняем результаты в JSON файл в папке data
+    # Save results to JSON file in the data folder
     save_to_json(content, args.output)
-    print(f"\nРезультаты сохранены в файл 'data/{args.output}'")
+    print(f"\nResults saved to file 'data/{args.output}'")

@@ -44,7 +44,7 @@ def parse_site_content(start_url):
         if current_url in visited:
             continue
 
-        print(f"Парсинг: {current_url}")
+        print(f"Parsing: {current_url}")
         visited.add(current_url)
 
         try:
@@ -64,7 +64,7 @@ def parse_site_content(start_url):
                     to_visit.append(full_url)
 
         except Exception as e:
-            print(f"Ошибка при парсинге {current_url}: {e}")
+            print(f"Error parsing {current_url}: {e}")
 
     return site_content
 
@@ -78,13 +78,13 @@ if __name__ == "__main__":
     start_url = "https://www.immigration.govt.nz/new-zealand-visas"
     content = parse_site_content(start_url)
 
-    print("\nСодержимое сайта:")
+    print("\nSite content:")
     for url, text in content.items():
         print(f"\n{url}")
-        print(f"Текст (первые 200 символов): {text[:200]}...")
+        print(f"Text (first 200 characters): {text[:200]}...")
 
-    print(f"\nВсего проанализировано уникальных страниц с содержимым: {len(content)}")
+    print(f"\nTotal unique pages analyzed with content: {len(content)}")
 
-    # Сохраняем результаты в JSON файл
+    # Save results to JSON file
     save_to_json(content, 'site_content.json')
-    print(f"\nРезультаты сохранены в файл 'site_content.json'")
+    print(f"\nResults saved to file 'site_content.json'")
