@@ -6,7 +6,7 @@ from sentence_transformers import SentenceTransformer
 import anthropic
 
 # Initialize Elasticsearch client
-es = Elasticsearch(['http://elasticsearch:9200'])
+es = Elasticsearch('http://elasticsearch:9200')
 
 # Initialize SentenceTransformer model
 model_name = os.environ.get('SENTENCE_TRANSFORMERS_MODEL')
@@ -77,11 +77,10 @@ def index_document(filename):
                 'url': url,
                 'header': header,
                 'content': chunk,
-                'vector': vector.tolist(),
-                'chunk_index': i
+                'vector': vector.tolist()
             }
 
-            es.index(index=INDEX_NAME, body=index_doc, id=f"{url}_{i}")
+            es.index(index=INDEX_NAME, body=index_doc)
 
         total_chunks += len(content_chunks)
         print(f"Indexed: {url} ({len(content_chunks)} chunks)")
@@ -151,6 +150,7 @@ Answer:"""
     )
     
     print(response.completion)
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
