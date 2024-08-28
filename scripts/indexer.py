@@ -80,7 +80,15 @@ def index_document(filename):
                 'vector': vector.tolist()
             }
 
-            es.index(index=INDEX_NAME, body=index_doc)
+            try:
+                print(f"Attempting to index document: {url}_{i}")
+                es.index(index=INDEX_NAME, body=index_doc, id=f"{url}_{i}")
+                print(f"Successfully indexed document: {url}_{i}")
+            except exceptions.ElasticsearchException as e:
+                print(f"Error indexing document {url}_{i}: {e}")
+                print(f"Problematic document: {json.dumps(index_doc, indent=2)}")
+                # Continue with the next document instead of stopping the entire process
+                continue
 
         total_chunks += len(content_chunks)
         print(f"Indexed: {url} ({len(content_chunks)} chunks)")
