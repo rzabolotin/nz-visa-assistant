@@ -76,7 +76,7 @@ To index the scraped data:
 
 2. Run the indexing command:
    ```
-   docker-compose run app python indexer.py index your_data_file.json
+   docker-compose exec app runner index your_data_file.json
    ```
 
 Replace `your_data_file.json` with the actual name of your JSON file.
@@ -90,7 +90,7 @@ Note: The indexer automatically looks for files in the `/app/data` directory wit
 To perform a search:
 
 ```
-docker-compose run app python indexer.py search "Your search query here"
+docker-compose exec app runner search "Your search query here"
 ```
 
 Replace "Your search query here" with the actual question or query you want to search for.
@@ -106,7 +106,7 @@ The search will return the top 5 most relevant results, showing:
 - A snippet of the content
 
 ```
-docker-compose run app python indexer.py flush
+docker-compose exec app runner flush
 ```
 
 This will delete the entire 'website_content' index from Elasticsearch.

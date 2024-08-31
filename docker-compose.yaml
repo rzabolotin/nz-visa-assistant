@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
@@ -16,14 +14,14 @@ services:
   app:
     build:
       context: .
-      dockerfile: docker/indexer/Dockerfile
+      dockerfile: Dockerfile
       args:
         - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
     environment:
       - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
     volumes:
       - ./data:/app/data
-      - ./scripts/indexer.py:/app/indexer.py  # Прокидываем indexer.py в контейнер
+      - ./scripts/indexer.py:/app/indexer.py
     depends_on:
       - elasticsearch
 
