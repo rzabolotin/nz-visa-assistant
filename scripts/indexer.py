@@ -33,7 +33,7 @@ def create_index():
                 "url": {"type": "keyword"},
                 "header": {"type": "text"},
                 "content": {"type": "text"},
-                "vector": {"type": "dense_vector", "dims": 384, "index": True, "similarity": "cosine"},
+                "vector": {"type": "dense_vector", "dims": model.get_sentence_embedding_dimension(), "index": True, "similarity": "cosine"},
             }
         }
     }
@@ -41,7 +41,7 @@ def create_index():
     try:
         if not es.indices.exists(index=INDEX_NAME):
             es.indices.create(index=INDEX_NAME, body=index_settings)
-            print(f"Index '{INDEX_NAME}' created successfully.")
+            print(f"Index '{INDEX_NAME}' created successfully with embedding dimension: {model.get_sentence_embedding_dimension()}")
         else:
             print(f"Index '{INDEX_NAME}' already exists.")
     except exceptions.ElasticsearchException as e:
