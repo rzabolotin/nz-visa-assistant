@@ -19,6 +19,8 @@ services:
         - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
     environment:
       - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL:-http://elasticsearch:9200}
+      - ELASTICSEARCH_INDEX=${ELASTICSEARCH_INDEX:-website_index}
     volumes:
       - ./data:/app/data
       - ./scripts/indexer.py:/app/indexer.py

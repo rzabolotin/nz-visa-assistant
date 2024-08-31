@@ -12,14 +12,18 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Initialize Elasticsearch client
-es = Elasticsearch('http://elasticsearch:9200')
+elasticsearch_url = os.environ.get('ELASTICSEARCH_URL')
+if not elasticsearch_url:
+    print("Error: ELASTICSEARCH_URL environment variable is not set.")
+    sys.exit(1)
+es = Elasticsearch(elasticsearch_url)
 
 # Initialize SentenceTransformer model
 model_name = os.environ.get('SENTENCE_TRANSFORMERS_MODEL')
 model = SentenceTransformer(model_name)
 
 # Index name
-INDEX_NAME = 'website_content'
+INDEX_NAME = os.environ.get('ELASTICSEARCH_INDEX', 'website_content')
 
 
 def create_index():
