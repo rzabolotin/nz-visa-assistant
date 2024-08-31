@@ -1,9 +1,15 @@
 import json
 import sys
 import os
+import warnings
+
+import anthropic
 from elasticsearch import Elasticsearch, exceptions
 from sentence_transformers import SentenceTransformer
-import anthropic
+
+
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Initialize Elasticsearch client
 es = Elasticsearch('http://elasticsearch:9200')
@@ -43,7 +49,7 @@ def create_index():
         sys.exit(1)
 
 
-def chunk_content(content, chunk_size=2000, overlap=100):
+def chunk_content(content, chunk_size=1000, overlap=100):
     chunks = []
     start = 0
     while start < len(content):
@@ -80,7 +86,7 @@ def index_document(filename):
                 'vector': vector.tolist()
             }
 
-            es.index(index=INDEX_NAME, body=index_doc)
+            es.index(index=INDEX_NAME, body=index_doc, id=f"{url}_{i}")
 
         total_chunks += len(content_chunks)
         print(f"Indexed: {url} ({len(content_chunks)} chunks)")
