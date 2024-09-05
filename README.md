@@ -1,29 +1,30 @@
+
 # New Zealand Visa Information Chatbot
 
 ## Project Overview
+This project aims to create a Telegram chatbot that serves as a RAG (Retrieval-Augmented Generation) assistant for answering user questions about obtaining visas and residency in New Zealand. The chatbot is designed to improve upon traditional search methods by providing more accurate and context-aware responses based on information from the official New Zealand immigration website: https://www.immigration.govt.nz/new-zealand-visas
 
-This project demonstrates the practical application of Large Language Models (LLMs) in creating an interactive and informative chatbot for visa-related queries.  
-This project is developed as a final project for the [LLM Zoomcamp course](https://github.com/DataTalksClub/llm-zoomcamp/). It aims to create a Telegram chatbot that answers user questions about obtaining a visa for New Zealand, based on information from the official immigration website: https://www.immigration.govt.nz/new-zealand-visas
+### Key Features:
+- Utilizes Large Language Models (LLMs) to provide interactive and informative responses
+- Implements RAG technology for enhanced information retrieval and answer generation
+- Provides links to official sources, ensuring users can verify information and access additional details
 
+### Target Audience:
+The primary audience for this chatbot includes individuals seeking to understand New Zealand's immigration laws, particularly those interested in obtaining visas or residency. This could include potential immigrants, students, workers, or anyone planning an extended stay in New Zealand.
 
-## Project Status
+### Scope of Capabilities:
+The chatbot is designed to answer a wide range of questions related to New Zealand immigration, including but not limited to:
+- Visa types and requirements
+- Application processes
+- Eligibility criteria for different visas and residency options
+- Documentation needed for applications
+- Processing times and fees
+- Rights and responsibilities under different visa categories
 
-Current status: In progress
+### Problem Solved:
+This chatbot addresses the challenge of navigating complex immigration information by providing an easy-to-use, conversational interface. It aims to simplify the process of finding accurate, up-to-date information about New Zealand's immigration policies and procedures, saving users time and reducing confusion often associated with parsing through extensive government websites.
 
-### Tasks
-- [x] Implement a web scraper to download data from the immigration website and create a JSON file
-- [x] Set up docker-compose configuration for building images for indexing and searching
-- [x] Implement command-line argument for custom output filename in parser script
-- [x] Implement indexing data from the JSON file to Elasticsearch
-- [x] Implement a search algorithm for efficient information retrieval
-- [ ] Integrate RAG (Retrieval-Augmented Generation) using Anthropic's LLM
-- [ ] Develop and deploy a Telegram chatbot interface
-- [ ] Add License information
-- [ ] Adopt parser script for running in a Docker container
-- [ ] Parse additional information from https://www.immigration.govt.nz/opsmanual/
-- [ ] Draft of the chatbot
-- [ ] Transform user's question into a query using LLM (translation and adoption for elasticsearch)
-
+This project is developed as a final project for the [LLM Zoomcamp course](https://github.com/DataTalksClub/llm-zoomcamp/), demonstrating the practical application of Large Language Models in creating an valuable tool for real-world information retrieval and assistance.
 
 ## How to Run the Project
 
