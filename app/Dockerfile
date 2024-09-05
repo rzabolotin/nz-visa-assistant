@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir pipenv
 
-COPY Pipfile Pipfile.lock ./
+COPY ../Pipfile Pipfile.lock ./
 
 RUN pipenv install --deploy --ignore-pipfile
 
@@ -12,9 +12,9 @@ ARG SENTENCE_TRANSFORMERS_MODEL
 
 RUN pipenv run python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('${SENTENCE_TRANSFORMERS_MODEL}')"
 
-COPY scripts/indexer.py .
+COPY indexer.py .
 
-COPY scripts/runner.sh /usr/local/bin/runner
+COPY ../scripts/runner.sh /usr/local/bin/runner
 
 RUN chmod +x /usr/local/bin/runner
 
