@@ -3,5 +3,5 @@
 .env
 .obsidian
 **/ollama_data
-data/*.json
+
 .aider*
