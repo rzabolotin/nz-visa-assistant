@@ -26,6 +26,20 @@ This chatbot addresses the challenge of navigating complex immigration informati
 
 This project is developed as a final project for the [LLM Zoomcamp course](https://github.com/DataTalksClub/llm-zoomcamp/), demonstrating the practical application of Large Language Models in creating an valuable tool for real-world information retrieval and assistance.
 
+## Data Collection and Parsing
+
+Data is collected by scraping the official New Zealand Immigration website. The data is then parsed and stored in a JSON file for indexing and retrieval.
+The parsing [script](scripts/parser.py) extracts relevant information from the website.
+Parsed data stored in the [data](data) directory, but if you want to parse the data yourself, follow the instructions below.
+
+To run the parser script, use the following command:
+```bash
+pipenv install 
+pipenv run python scripts/parser.py
+```
+> Script has optional arguments, use `--help` to see them.
+
+
 ## How to Run the Project
 
 ### Prerequisites
