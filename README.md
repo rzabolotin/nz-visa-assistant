@@ -1,6 +1,8 @@
 
 # New Zealand Visa Information Chatbot
 
+![new-zealand.png](media/new-zealand.png)
+
 ## Project Overview
 This project aims to create a Telegram chatbot that serves as a RAG (Retrieval-Augmented Generation) assistant for answering user questions about obtaining visas and residency in New Zealand. The chatbot is designed to improve upon traditional search methods by providing more accurate and context-aware responses based on information from the official New Zealand immigration website: https://www.immigration.govt.nz/new-zealand-visas
 
