@@ -11,7 +11,7 @@ Current status: In progress
 * RAG flow
     * 0 points: No knowledge base or LLM is used
     * 1 point: No knowledge base is used, and the LLM is queried directly
-    * 2 points: Both a knowledge base and an LLM are used in the RAG flow 
+    * **2 points**: Both a knowledge base and an LLM are used in the RAG flow 
 * Retrieval evaluation
     * 0 points: No evaluation of retrieval is provided
     * 1 point: Only one retrieval approach is evaluated
@@ -53,9 +53,11 @@ Current status: In progress
 - [x] Implement command-line argument for custom output filename in parser script
 - [x] Implement indexing data from the JSON file to Elasticsearch
 - [x] Implement a search algorithm for efficient information retrieval
-- [ ] Add final data to project, end explain parsing more clear
+- [x] Add final data to project, end explain parsing more clear
+- [x] Update readme according to the Evaluation criteria (clear for scoring)
 - [ ] Add a notebook how to run simple RAG with minsearch and elasticsearch
-- [ ] Update readme according to the Evaluation criteria (clear for scoring)
+- [ ] Create a Jupyter notebook for evaluation retrieval
+  - [ ] Create ground truth data for searching
 - [ ] Integrate RAG (Retrieval-Augmented Generation) using Anthropic's LLM in docker compose
 - [ ] Develop and deploy a Telegram chatbot interface
 - [ ] Add License information

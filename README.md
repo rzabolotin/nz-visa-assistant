@@ -30,8 +30,8 @@ This project is developed as a final project for the [LLM Zoomcamp course](https
 
 ## Data Collection and Parsing
 
-Data is collected by scraping the official New Zealand Immigration website. The data is then parsed and stored in a JSON file for indexing and retrieval.
-The parsing [script](scripts/parser.py) extracts relevant information from the website.
+Data is collected by scraping the official New Zealand Immigration website. The data is then parsed and stored in a JSON file for indexing and retrieval.  
+The parsing [script](scripts/parser.py) extracts relevant information from the website.  
 Parsed data stored in the [data](data) directory, but if you want to parse the data yourself, follow the instructions below.
 
 To run the parser script, use the following command:
@@ -39,8 +39,13 @@ To run the parser script, use the following command:
 pipenv install 
 pipenv run python scripts/parser.py
 ```
-> Script has optional arguments, use `--help` to see them.
+> [Script](scripts/parser.py) has optional arguments, use `--help` to see them.
 
+
+### Basic RAG flow
+
+The basic flow is presented in [this notebook](notebooks/1.basic_rag.ipynb).
+It uses the `minisearch` library for search and the `anthropic' api for RAG.
 
 ## How to Run the Project
 
