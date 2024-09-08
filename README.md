@@ -47,6 +47,12 @@ pipenv run python scripts/parser.py
 The basic flow is presented in [this notebook](notebooks/1.basic_rag.ipynb).
 It uses the `minisearch` library for search and the `anthropic' api for RAG.
 
+### Evaluating different retrieval approaches
+
+I created ground truth data for evaluating different retrieval approaches using the [script](scripts/generate_ground_truth.py).  
+
+In the [evaluation notebook](notebooks/2.retrieval_evaluation.ipynb) I tested various retrieval methods including Minsearch and Elasticsearch configurations. I compared text-based and vector-based search, with and without content chunking. My analysis, using metrics like Hit Rate, MRR, and NDCG, revealed that Elasticsearch's combined search method performed best. This approach, leveraging both text and vector capabilities, was chosen for its robust performance across diverse query types.
+
 ## How to Run the Project
 
 ### Prerequisites
