@@ -30,13 +30,13 @@ This project is developed as a final project for the [LLM Zoomcamp course](https
 
 ## Data Collection and Parsing
 
-Data is collected by scraping the official New Zealand Immigration website. The data is then parsed and stored in a JSON file for indexing and retrieval.  
-The parsing [script](scripts/parser.py) extracts relevant information from the website.  
+Data is collected by scraping the official New Zealand Immigration website. The data is then parsed and stored in a JSON file for indexing and retrieval.
+The parsing [script](scripts/parser.py) extracts relevant information from the website.
 Parsed data stored in the [data](data) directory, but if you want to parse the data yourself, follow the instructions below.
 
 To run the parser script, use the following command:
 ```bash
-pipenv install 
+pipenv install
 pipenv run python scripts/parser.py
 ```
 > [Script](scripts/parser.py) has optional arguments, use `--help` to see them.
@@ -49,9 +49,14 @@ It uses the `minisearch` library for search and the `anthropic' api for RAG.
 
 ### Evaluating different retrieval approaches
 
-I created ground truth data for evaluating different retrieval approaches using the [script](scripts/generate_ground_truth.py).  
+I created ground truth data for evaluating different retrieval approaches using the [script](scripts/generate_ground_truth.py).
 
 In the [evaluation notebook](notebooks/2.retrieval_evaluation.ipynb) I tested various retrieval methods including Minsearch and Elasticsearch configurations. I compared text-based and vector-based search, with and without content chunking. My analysis, using metrics like Hit Rate, MRR, and NDCG, revealed that Elasticsearch's combined search method performed best. This approach, leveraging both text and vector capabilities, was chosen for its robust performance across diverse query types.
+
+
+### Evaluating different RAG approaches
+
+In this [evaluation notebook](notebooks/3.RAG_evaluation.ipynb), I compared different RAG approaches using Anthropic's LLM API. I evaluated multiple prompts and search strategies to determine the most effective method for generating responses. By analyzing metrics like LLM-as-a-judge and ROUGE scores, I identified the optimal RAG configuration for this chatbot. The chosen approach combines a specific prompt with a search query to produce accurate and informative answers.
 
 ## How to Run the Project
 
