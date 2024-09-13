@@ -17,6 +17,7 @@ pre-commit = "*"
 isort = "*"
 black = "*"
 flake8 = "*"
+rouge = "*"
 
 [requires]
 python_version = "3.12"

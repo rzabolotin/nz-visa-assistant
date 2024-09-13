@@ -11,7 +11,7 @@ Current status: In progress
 * RAG flow
     * 0 points: No knowledge base or LLM is used
     * 1 point: No knowledge base is used, and the LLM is queried directly
-    * **2 points**: Both a knowledge base and an LLM are used in the RAG flow 
+    * **2 points**: Both a knowledge base and an LLM are used in the RAG flow
 * Retrieval evaluation
     * 0 points: No evaluation of retrieval is provided
     * 1 point: Only one retrieval approach is evaluated
@@ -19,11 +19,11 @@ Current status: In progress
 * RAG evaluation
     * 0 points: No evaluation of RAG is provided
     * 1 point: Only one RAG approach (e.g., one prompt) is evaluated
-    * 2 points: Multiple RAG approaches are evaluated, and the best one is used
+    * **2 points**: Multiple RAG approaches are evaluated, and the best one is used
 * Interface
    * 0 points: No way to interact with the application at all
    * 1 point: Command line interface, a script, or a Jupyter notebook
-   * 2 points: UI (e.g., Streamlit), web application (e.g., Django), or an API (e.g., built with FastAPI) 
+   * 2 points: UI (e.g., Streamlit), web application (e.g., Django), or an API (e.g., built with FastAPI)
 * Ingestion pipeline
    * 0 points: No ingestion
    * 1 point: Semi-automated ingestion of the dataset into the knowledge base, e.g., with a Jupyter notebook
