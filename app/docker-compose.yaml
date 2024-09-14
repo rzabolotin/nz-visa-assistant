@@ -1,37 +1,37 @@
+version: '3.8'
+
 services:
+  bot:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - elasticsearch
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - ELASTIC_URL=http://elasticsearch:9200
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DATABASE_URL=postgresql+asyncpg://user:password@db/botdb
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=botdb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     volumes:
-      - esdata:/usr/share/elasticsearch/data
-
-  app:
-    build:
-      context: ..
-      dockerfile: Dockerfile
-      args:
-        - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
-    environment:
-      - SENTENCE_TRANSFORMERS_MODEL=${SENTENCE_TRANSFORMERS_MODEL:-paraphrase-MiniLM-L6-v2}
-      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL:-http://elasticsearch:9200}
-      - ELASTICSEARCH_INDEX=${ELASTICSEARCH_INDEX:-website_index}
-    volumes:
-      - ./data:/app/data
-      - ./scripts/indexer.py:/app/indexer.py
-    depends_on:
-      - elasticsearch
+      - elasticsearch_data:/usr/share/elasticsearch/data
 
 volumes:
-  esdata:
-    driver: local
-
-
-
-
-
+  postgres_data:
+  elasticsearch_data:

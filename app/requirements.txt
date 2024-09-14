@@ -1,0 +1,6 @@
+aiogram
+elasticsearch==8.15.1
+anthropic
+sqlalchemy
+asyncpg
+python-dotenv
