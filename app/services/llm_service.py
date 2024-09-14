@@ -7,20 +7,25 @@ from services.elastic_service import search_documents
 client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
-async def process_query(query: str) -> str:
+async def process_query(query: str) -> tuple[str, int, int]:
     search_results = await search_documents(query)
     prompt = build_prompt(query, search_results)
-    response = await call_llm(prompt)
-    return extract_answer(response)
+    response, input_tokens, output_tokens = await call_llm(prompt)
+    answer = extract_answer(response)
+    return answer, input_tokens, output_tokens
 
 
-async def call_llm(prompt: str) -> str:
+async def call_llm(prompt: str) -> tuple[str, int, int]:
     response = client.messages.create(
         model=LLM_MODEL,
         max_tokens=500,
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
     )
-    return response.content[0].text
+    return (
+        response.content[0].text,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+    )
 
 
 def format_search_results(search_results: list[dict]) -> str:

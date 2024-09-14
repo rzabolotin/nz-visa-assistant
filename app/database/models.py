@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from config import DATABASE_URL
-from sqlalchemy import Column, DateTime, Integer, String, Text
+from sqlalchemy import BigInteger, Column, DateTime, Integer, Text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -15,6 +15,8 @@ class Dialog(Base):
     user_id = Column(Integer, index=True)
     query = Column(Text)
     answer = Column(Text)
+    input_tokens_count = Column(BigInteger)
+    output_tokens_count = Column(BigInteger)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
 
@@ -27,8 +29,21 @@ async def init_db():
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def save_dialog(user_id: int, query: str, answer: str):
+async def save_dialog(
+    user_id: int, query: str, answer: str, input_tokens: int, output_tokens: int
+):
     async with AsyncSessionLocal() as session:
-        dialog = Dialog(user_id=user_id, query=query, answer=answer)
-        session.add(dialog)
-        await session.commit()
+        try:
+            dialog = Dialog(
+                user_id=user_id,
+                query=query,
+                answer=answer,
+                input_tokens_count=input_tokens,
+                output_tokens_count=output_tokens,
+            )
+            session.add(dialog)
+            await session.commit()
+            return dialog.id
+        except Exception as e:
+            await session.rollback()
+            raise Exception(f"Failed to save dialog: {str(e)}")

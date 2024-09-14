@@ -24,8 +24,8 @@ async def handle_message(message: Message):
     try:
         await message.bot.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        answer = await process_query(query)
-        # await save_dialog(user_id, query, answer)
+        answer, input_tokens, output_tokens = await process_query(query)
+        await save_dialog(user_id, query, answer, input_tokens, output_tokens)
 
         # Send the final answer
         await message.answer(answer, parse_mode=ParseMode.MARKDOWN)
