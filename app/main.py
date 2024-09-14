@@ -1,13 +1,13 @@
 import asyncio
+
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.client.default import DefaultBotProperties
-
-from config import BOT_TOKEN
 from bot.handlers import router
+from config import BOT_TOKEN
 from database.models import init_db
-from services.elastic_service import es_client
+from services.elastic_service import es_client, find_or_create_index
 
 
 async def main():
@@ -16,6 +16,7 @@ async def main():
     dp.include_router(router)
 
     await init_db()
+    await find_or_create_index()
 
     for _ in range(30):  # Пробуем в течение 30 секунд
         try:

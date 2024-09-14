@@ -1,9 +1,9 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import Column, Integer, String, Text, DateTime
 from datetime import datetime
 
 from config import DATABASE_URL
+from sqlalchemy import Column, DateTime, Integer, String, Text
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
 

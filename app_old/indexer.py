@@ -1,12 +1,11 @@
 import json
-import sys
 import os
+import sys
 import warnings
 
 import anthropic
 from elasticsearch import Elasticsearch, exceptions
 from sentence_transformers import SentenceTransformer
-
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)

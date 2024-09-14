@@ -1,8 +1,8 @@
+import argparse
 import json
 import random
 import re
-import argparse
-from typing import List, Dict
+from typing import Dict, List
 
 from anthropic import Anthropic
 from elasticsearch import Elasticsearch

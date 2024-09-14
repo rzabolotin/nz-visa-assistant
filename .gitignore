@@ -6,3 +6,4 @@
 
 .aider*
 __pycache__/
+app/data/*.json
