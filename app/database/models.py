@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from config import DATABASE_URL
-from sqlalchemy import BigInteger, Column, DateTime, Integer, Text
+from sqlalchemy import BigInteger, Boolean, Column, DateTime, Integer, Text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -17,6 +17,15 @@ class Dialog(Base):
     answer = Column(Text)
     input_tokens_count = Column(BigInteger)
     output_tokens_count = Column(BigInteger)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+
+class Feedback(Base):
+    __tablename__ = "feedback"
+
+    id = Column(Integer, primary_key=True, index=True)
+    dialog_id = Column(Integer, index=True)
+    is_positive = Column(Boolean)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
 
@@ -47,3 +56,18 @@ async def save_dialog(
         except Exception as e:
             await session.rollback()
             raise Exception(f"Failed to save dialog: {str(e)}")
+
+
+async def save_feedback(dialog_id: int, is_positive: bool):
+    async with AsyncSessionLocal() as session:
+        try:
+            feedback = Feedback(
+                dialog_id=dialog_id,
+                is_positive=is_positive,
+            )
+            session.add(feedback)
+            await session.commit()
+            return feedback.id
+        except Exception as e:
+            await session.rollback()
+            raise Exception(f"Failed to save feedback: {str(e)}")
