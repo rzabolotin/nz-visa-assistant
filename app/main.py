@@ -8,9 +8,11 @@ from bot.handlers import router
 from config import BOT_TOKEN
 from database.models import init_db
 from services.elastic_service import es_client, find_or_create_index
+from utils.logger import logger
 
 
 async def main():
+    logger.info("Starting the bot")
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router)

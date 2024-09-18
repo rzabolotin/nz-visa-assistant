@@ -6,3 +6,5 @@ asyncpg
 python-dotenv
 sentence_transformers
 tqdm
+langchain-community
+langchain-anthropic

@@ -9,12 +9,17 @@ from config import (
 from elasticsearch import AsyncElasticsearch
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
+from utils.logger import logger
 
 es_client = AsyncElasticsearch([ELASTIC_URL])
 model = SentenceTransformer(SENTENCE_TRANSFORMERS_MODEL)
 
+logger.info(f"Initialized Elasticsearch client with URL: {ELASTIC_URL}")
+logger.info(f"Loaded SentenceTransformer model: {SENTENCE_TRANSFORMERS_MODEL}")
+
 
 async def search_documents(query: str) -> list:
+    logger.info(f"Searching documents for query: {query}")
     vector = model.encode(query).tolist()
     search_query = {
         "_source": [
@@ -50,11 +55,14 @@ async def search_documents(query: str) -> list:
     }
 
     es_results = await es_client.search(index=ELASTIC_INDEX_NAME, body=search_query)
-    return [hit["_source"] for hit in es_results["hits"]["hits"]]
+    results = [hit["_source"] for hit in es_results["hits"]["hits"]]
+    logger.info(f"Found {len(results)} documents for query: {query}")
+    return results
 
 
 async def find_or_create_index() -> None:
     if not await es_client.indices.exists(index=ELASTIC_INDEX_NAME):
+        logger.info(f"Index '{ELASTIC_INDEX_NAME}' does not exist. Creating...")
         index_settings = {
             "settings": {"number_of_shards": 1, "number_of_replicas": 0},
             "mappings": {
@@ -72,14 +80,14 @@ async def find_or_create_index() -> None:
             },
         }
         await es_client.indices.create(index=ELASTIC_INDEX_NAME, body=index_settings)
-        print(f"Index '{ELASTIC_INDEX_NAME}' created successfully.")
+        logger.info(f"Index '{ELASTIC_INDEX_NAME}' created successfully.")
         raw_doc = await load_data(DATA_FILE_PATH)
         data_chunk = chunk_data(raw_doc)
         await encode_and_index_data(data_chunk)
-        print(f"Data indexed successfully.")
+        logger.info("Data indexed successfully.")
 
     else:
-        print(f"Index '{ELASTIC_INDEX_NAME}' already exists.")
+        logger.info(f"Index '{ELASTIC_INDEX_NAME}' already exists.")
 
 
 async def load_data(file_path: str) -> dict:
