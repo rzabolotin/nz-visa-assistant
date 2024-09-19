@@ -62,6 +62,9 @@ In this [evaluation notebook](notebooks/3.RAG_evaluation.ipynb), I compared diff
 ## Interface
 
 The chatbot interface is implemented by aiogram library and is containerized using Docker-compose.
+
+![bot.gif](media/bot.gif)
+
 The application is located in [app](app) directory.
 
 Before running the application, you need to set the environment variables.
