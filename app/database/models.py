@@ -15,7 +15,9 @@ class Dialog(Base):
     user_id = Column(Integer, index=True)
     query = Column(Text)
     answer = Column(Text)
-    input_tokens_count = Column(BigInteger)
+    language = Column(Text)  # New field for storing the detected language
+    main_prompt_token_count = Column(BigInteger)
+    system_tokens_count = Column(BigInteger)
     output_tokens_count = Column(BigInteger)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
@@ -39,7 +41,13 @@ async def init_db():
 
 
 async def save_dialog(
-    user_id: int, query: str, answer: str, input_tokens: int, output_tokens: int
+    user_id: int,
+    query: str,
+    answer: str,
+    language: str,
+    main_prompt_token: int,
+    system_tokens: int,
+    output_tokens: int,
 ):
     async with AsyncSessionLocal() as session:
         try:
@@ -47,7 +55,9 @@ async def save_dialog(
                 user_id=user_id,
                 query=query,
                 answer=answer,
-                input_tokens_count=input_tokens,
+                language=language,
+                main_prompt_token_count=main_prompt_token,
+                system_tokens_count=system_tokens,
                 output_tokens_count=output_tokens,
             )
             session.add(dialog)

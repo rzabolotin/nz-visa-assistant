@@ -39,7 +39,7 @@ Current status: In progress
 * Reproducibility
     * 0 points: No instructions on how to run the code, the data is missing, or it's unclear how to access it
     * 1 point: Some instructions are provided but are incomplete, OR instructions are clear and complete, the code works, but the data is missing
-    * 2 points: Instructions are clear, the dataset is accessible, it's easy to run the code, and it works. The versions for all dependencies are specified.
+    * **2 points**: Instructions are clear, the dataset is accessible, it's easy to run the code, and it works. The versions for all dependencies are specified.
 * Best practices
     * [x] Hybrid search: combining both text and vector search (at least evaluating it) (1 point)
     * [ ] Document re-ranking (1 point)

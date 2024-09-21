@@ -17,44 +17,72 @@ chat_model = ChatAnthropic(model=LLM_MODEL, anthropic_api_key=ANTHROPIC_API_KEY)
 logger.info(f"Initialized Anthropic client and models with model: {LLM_MODEL}")
 
 
-async def process_query(query: str) -> Tuple[str, int, int]:
+class TokenCounter:
+    def __init__(self):
+        self.main_prompt_tokens = 0
+        self.output_tokens = 0
+        self.system_tokens = 0
+
+    def add_main_prompt_tokens(self, tokens: int):
+        self.main_prompt_tokens += tokens
+
+    def add_output_tokens(self, tokens: int):
+        self.output_tokens += tokens
+
+    def add_system_tokens(self, tokens: int):
+        self.system_tokens += tokens
+
+
+async def process_query(query: str) -> Tuple[str, str, TokenCounter]:
     logger.info(f"Processing query: {query}")
 
+    token_counter = TokenCounter()
+
     # Detect language and translate if necessary
-    detected_language, translated_query = await detect_and_translate(query)
+    detected_language, translated_query = await detect_and_translate(
+        query, token_counter
+    )
     logger.info(f"Detected language: {detected_language}")
 
     # Check if the query is related to NZ immigration
-    if not await is_related_to_nz_immigration(translated_query):
+    if not await is_related_to_nz_immigration(translated_query, token_counter):
         logger.info("Query not related to NZ immigration. Generating generic response.")
-        answer = await generate_generic_response(translated_query)
-        if detected_language != "english":
+        answer = await generate_generic_response(translated_query, token_counter)
+        if detected_language not in ["english", "en"]:
             logger.info(f"Translating answer back to {detected_language}")
-            return await translate_text(answer, "english", detected_language), 0, 0
+            answer = await translate_text(
+                answer, "english", detected_language, token_counter
+            )
+
+        return answer, detected_language, token_counter
 
     # Prepare relevant search query
-    search_query = await prepare_search_query(translated_query)
+    search_query = await prepare_search_query(translated_query, token_counter)
     logger.info(f"Prepared search query: {search_query}")
 
     search_results = await search_documents(search_query)
     logger.info(f"Found {len(search_results)} search results")
 
     prompt = build_prompt(translated_query, search_results)
-    response, input_tokens, output_tokens = await call_llm(prompt)
+    response = await call_llm(prompt, token_counter)
     answer = extract_answer(response)
 
     # Translate answer back to original language if necessary
-    if detected_language != "english":
+    if detected_language not in ["english", "en"]:
         logger.info(f"Translating answer back to {detected_language}")
-        answer = await translate_text(answer, "english", detected_language)
+        answer = await translate_text(
+            answer, "english", detected_language, token_counter
+        )
 
     logger.info(
-        f"Processed query. Input tokens: {input_tokens}, Output tokens: {output_tokens}"
+        f"Processed query. Main prompt tokens: {token_counter.main_prompt_tokens}, System tokens: {token_counter.system_tokens}, Output tokens: {token_counter.output_tokens}"
     )
-    return answer, input_tokens, output_tokens
+    return answer, detected_language, token_counter
 
 
-async def detect_and_translate(text: str) -> Tuple[str, str]:
+async def detect_and_translate(
+    text: str, token_counter: TokenCounter
+) -> Tuple[str, str]:
     prompt = PromptTemplate(
         input_variables=["text"],
         template="""
@@ -69,7 +97,10 @@ async def detect_and_translate(text: str) -> Tuple[str, str]:
         """,
     )
     chain = prompt | chat_model
-    response = await chain.ainvoke({"text": text})
+    with get_openai_callback() as cb:
+        response = await chain.ainvoke({"text": text})
+        token_counter.add_system_tokens(cb.total_tokens)
+
     lines = response.content.strip().split("\n")
     detected_language = lines[0].split(": ")[1].lower()
     translation = lines[1].split(": ")[1]
@@ -77,7 +108,9 @@ async def detect_and_translate(text: str) -> Tuple[str, str]:
     return detected_language, translation
 
 
-async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
+async def translate_text(
+    text: str, source_lang: str, target_lang: str, token_counter: TokenCounter
+) -> str:
     prompt = PromptTemplate(
         input_variables=["text", "source_lang", "target_lang"],
         template="""
@@ -89,48 +122,65 @@ async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
         """,
     )
     chain = prompt | chat_model
-    response = await chain.ainvoke(
-        {"text": text, "source_lang": source_lang, "target_lang": target_lang}
-    )
+    with get_openai_callback() as cb:
+        response = await chain.ainvoke(
+            {"text": text, "source_lang": source_lang, "target_lang": target_lang}
+        )
+        token_counter.add_system_tokens(cb.total_tokens)
+
     logger.info(f"Response from translation model: {response}")
+
     return response.content.strip()
 
 
-async def is_related_to_nz_immigration(query: str) -> bool:
+async def is_related_to_nz_immigration(query: str, token_counter: TokenCounter) -> bool:
     prompt = PromptTemplate(
         input_variables=["query"],
         template="Determine if the following query is related to New Zealand immigration or visas. Respond with only one word: 'Yes' or 'No'.\n\nQuery: {query}\n\nIs this related to New Zealand immigration or visas?",
     )
     chain = prompt | chat_model
-    response = await chain.ainvoke({"query": query})
+    with get_openai_callback() as cb:
+        response = await chain.ainvoke({"query": query})
+        token_counter.add_system_tokens(cb.total_tokens)
+
     logger.info(f"Response from related query model: {response.content}")
+
     return "yes" in response.content.strip().lower()
 
 
-async def generate_generic_response(query: str) -> str:
+async def generate_generic_response(query: str, token_counter: TokenCounter) -> str:
     prompt = PromptTemplate(
         input_variables=["query"],
         template="The following query is not related to New Zealand immigration or visas. Generate a polite response explaining that this bot specializes in New Zealand immigration and visa information, and cannot assist with this query.\n\nQuery: {query}\n\nResponse:",
     )
     chain = prompt | chat_model
-    response = await chain.ainvoke({"query": query})
+    with get_openai_callback() as cb:
+        response = await chain.ainvoke({"query": query})
+        token_counter.add_system_tokens(cb.total_tokens)
+
     return response.content
 
 
-async def prepare_search_query(query: str) -> str:
+async def prepare_search_query(query: str, token_counter: TokenCounter) -> str:
     prompt = PromptTemplate(
         input_variables=["query"],
         template="Given the following user query about New Zealand immigration or visas, rephrase it and make more good for searching. Respond only with reprhased query, and without warming-up. :\n\nUser Query: {query}\n\nSearch Query:",
     )
     chain = prompt | chat_model
-    response = await chain.ainvoke({"query": query})
+    with get_openai_callback() as cb:
+        response = await chain.ainvoke({"query": query})
+        token_counter.add_system_tokens(cb.total_tokens)
+
     return response.content
 
 
-async def call_llm(prompt: str) -> Tuple[str, int, int]:
+async def call_llm(prompt: str, token_counter: TokenCounter) -> str:
     with get_openai_callback() as cb:
         response = chat_model([HumanMessage(content=prompt)])
-    return response.content, cb.prompt_tokens, cb.completion_tokens
+        token_counter.add_main_prompt_tokens(cb.prompt_tokens)
+        token_counter.add_output_tokens(cb.completion_tokens)
+
+    return response.content
 
 
 def format_search_results(search_results: List[dict]) -> str:

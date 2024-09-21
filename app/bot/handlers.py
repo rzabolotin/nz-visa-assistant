@@ -30,9 +30,15 @@ async def handle_message(message: Message):
     try:
         await message.bot.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-        answer, input_tokens, output_tokens = await process_query(query)
+        answer, detected_language, token_counter = await process_query(query)
         dialog_id = await save_dialog(
-            user_id, query, answer, input_tokens, output_tokens
+            user_id,
+            query,
+            answer,
+            detected_language,
+            token_counter.main_prompt_tokens,
+            token_counter.system_tokens,
+            token_counter.output_tokens,
         )
 
         logger.info(f"Processed query for user {user_id}. Dialog ID: {dialog_id}")
