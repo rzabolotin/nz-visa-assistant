@@ -156,3 +156,27 @@ The New Zealand Visa Information Chatbot is built with a robust architecture tha
    - Ensures users can verify information and access additional details from authoritative sources.
 
 This architecture allows the chatbot to efficiently process user queries, retrieve relevant information from a large dataset, and generate accurate, context-aware responses about New Zealand visa and immigration processes.
+
+## Monitoring
+
+The application includes Grafana for monitoring and visualization of system metrics. Grafana is integrated into the Docker Compose setup, allowing for easy access to performance data and system health information.
+
+- **Grafana Dashboard**: Access the Grafana dashboard at `http://localhost:3000` after starting the application.
+- **Default Credentials**:
+  - Username: admin
+  - Password: admin_password (as set in the docker-compose file)
+- **Data Source**: Grafana is pre-configured with PostgreSQL as a data source, enabling visualization of application data and metrics.
+
+To get started with monitoring:
+1. Log in to the Grafana dashboard using the provided credentials.
+2. Create custom ones to visualize your application's data and performance metrics.
+3. Set up alerts to be notified of any system anomalies or performance issues.
+4. Use SQL queries to create custom panels and dashboards based on your PostgreSQL data.
+
+Remember to change the default password in a production environment for security purposes.
+
+Note: The PostgreSQL data source is automatically provisioned, allowing you to immediately start creating dashboards based on your application's database.
+
+The queries could be found in the [queries.md](app/grafana/queries.md) file.
+
+Screenshots of the Grafana dashboard are available in the [dashboards.md](app/grafana/dashboards.md) file.

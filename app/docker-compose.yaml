@@ -32,6 +32,19 @@ services:
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin_password}
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
   elasticsearch_data:
+  grafana_data:
