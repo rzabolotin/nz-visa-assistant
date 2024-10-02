@@ -8,3 +8,5 @@ sentence_transformers
 tqdm
 langchain-community
 langchain-anthropic
+langchain-elasticsearch
+langchain-huggingface
