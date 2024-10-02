@@ -31,7 +31,7 @@ Current status: In progress
 * Monitoring
   * 0 points: No monitoring
   * 1 point: User feedback is collected OR there's a monitoring dashboard
-  * 2 points: User feedback is collected and there's a dashboard with at least 5 charts
+  * **2 points**: User feedback is collected and there's a dashboard with at least 5 charts
 * Containerization
   * 0 points: No containerization
   * 1 point: Dockerfile is provided for the main application OR there's a docker-compose for the dependencies only
@@ -42,7 +42,10 @@ Current status: In progress
   * **2 points**: Instructions are clear, the dataset is accessible, it's easy to run the code, and it works. The versions for all dependencies are specified.
 * Best practices
   * [x] Hybrid search: combining both text and vector search (at least evaluating it) (1 point)
-  * [ ] Document re-ranking (1 point)
+  * [x] Document re-ranking (1 point)
   * [x] User query rewriting (1 point)
+  * [ ] Check relevance of every chunk
+  * [ ] Update prompts - do not write about context
 * Bonus points (not covered in the course)
   * [ ] Deployment to the cloud (2 points)
+  * [x] Add dozzle and share port for dozzle and graphana

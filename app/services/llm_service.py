@@ -1,5 +1,4 @@
 import re
-from typing import List, Tuple
 
 from anthropic import Anthropic
 from config import ANTHROPIC_API_KEY, LLM_MODEL
@@ -33,7 +32,7 @@ class TokenCounter:
         self.system_tokens += tokens
 
 
-async def process_query(query: str) -> Tuple[str, str, TokenCounter]:
+async def process_query(query: str) -> tuple[str, str, TokenCounter]:
     logger.info(f"Processing query: {query}")
 
     token_counter = TokenCounter()
@@ -82,7 +81,7 @@ async def process_query(query: str) -> Tuple[str, str, TokenCounter]:
 
 async def detect_and_translate(
     text: str, token_counter: TokenCounter
-) -> Tuple[str, str]:
+) -> tuple[str, str]:
     prompt = PromptTemplate(
         input_variables=["text"],
         template="""
@@ -176,21 +175,23 @@ async def prepare_search_query(query: str, token_counter: TokenCounter) -> str:
 
 async def call_llm(prompt: str, token_counter: TokenCounter) -> str:
     with get_openai_callback() as cb:
-        response = chat_model([HumanMessage(content=prompt)])
+        response = chat_model.invoke([HumanMessage(content=prompt)])
         token_counter.add_main_prompt_tokens(cb.prompt_tokens)
         token_counter.add_output_tokens(cb.completion_tokens)
 
     return response.content
 
 
-def format_search_results(search_results: List[dict]) -> str:
+def format_search_results(search_results: list) -> str:
     formatted_results = ""
     for result in search_results:
-        formatted_results += f"- **{result['header']}**\n  {result['main_content']}\n  URL: {result['url']}\n\n"
+        formatted_results += (
+            f"- {result.page_content}\n  URL: {result.metadata['_source']['url']}\n\n"
+        )
     return formatted_results.strip()
 
 
-def build_prompt(query: str, search_results: List[dict]) -> str:
+def build_prompt(query: str, search_results: list[dict]) -> str:
     prompt_template = PromptTemplate(
         input_variables=["query", "context"],
         template="""

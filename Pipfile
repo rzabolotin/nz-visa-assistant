@@ -7,6 +7,9 @@ name = "pypi"
 elasticsearch = "*"
 sentence-transformers = "*"
 anthropic = "*"
+langchain-elasticsearch = "*"
+langchain = "*"
+langchain-community = "*"
 
 [dev-packages]
 jupyter = "*"
