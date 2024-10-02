@@ -175,7 +175,7 @@ async def prepare_search_query(query: str, token_counter: TokenCounter) -> str:
 
 async def call_llm(prompt: str, token_counter: TokenCounter) -> str:
     with get_openai_callback() as cb:
-        response = chat_model([HumanMessage(content=prompt)])
+        response = chat_model.invoke([HumanMessage(content=prompt)])
         token_counter.add_main_prompt_tokens(cb.prompt_tokens)
         token_counter.add_output_tokens(cb.completion_tokens)
 

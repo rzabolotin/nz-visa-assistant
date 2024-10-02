@@ -44,6 +44,17 @@ services:
     depends_on:
       - db
 
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    environment:
+      - DOZZLE_LEVEL=info
+      - DOZZLE_TAILSIZE=300
+      - DOZZLE_FILTER=status=running
+
 volumes:
   postgres_data:
   elasticsearch_data:

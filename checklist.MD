@@ -48,4 +48,4 @@ Current status: In progress
   * [ ] Update prompts - do not write about context
 * Bonus points (not covered in the course)
   * [ ] Deployment to the cloud (2 points)
-  * [ ] Add dozzle and share port for dozzle and graphana
+  * [x] Add dozzle and share port for dozzle and graphana
