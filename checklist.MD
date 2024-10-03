@@ -44,8 +44,8 @@ Current status: In progress
   * [x] Hybrid search: combining both text and vector search (at least evaluating it) (1 point)
   * [x] Document re-ranking (1 point)
   * [x] User query rewriting (1 point)
-  * [ ] Check relevance of every chunk
-  * [ ] Update prompts - do not write about context
+  * [x] Check relevance of every chunk
+  * [x] Update prompts - do not write about context
 * Bonus points (not covered in the course)
   * [ ] Deployment to the cloud (2 points)
   * [x] Add dozzle and share port for dozzle and graphana

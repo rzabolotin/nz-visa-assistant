@@ -227,6 +227,7 @@ def build_prompt(query: str, search_results: list) -> str:
         - Use bullet points or numbered lists for multiple items or steps.
         - Use `inline code` for specific visa codes or short official terms.
 
+        Skip mention that you were searching answer in knowledge base, avoid this explanation.
         Always include at least one relevant URL as a reference. Format the URL reference at the end of your answer like this:
         [Source](URL)
 
@@ -283,5 +284,8 @@ async def check_result_relevance(
             {"query": query, "result_content": result.page_content}
         )
         token_counter.add_system_tokens(cb.total_tokens)
+        logger.info(
+            f"Checking relevance of search result: {result.page_content} response: {response.content.strip().lower()}"
+        )
 
     return "yes" in response.content.strip().lower()
