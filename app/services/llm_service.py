@@ -62,7 +62,13 @@ async def process_query(query: str) -> tuple[str, str, TokenCounter]:
     search_results = await search_documents(search_query)
     logger.info(f"Found {len(search_results)} search results")
 
-    prompt = build_prompt(translated_query, search_results)
+    # Filter relevant search results
+    relevant_results = await filter_relevant_results(
+        translated_query, search_results, token_counter
+    )
+    logger.info(f"Filtered to {len(relevant_results)} relevant results")
+
+    prompt = build_prompt(translated_query, relevant_results)
     response = await call_llm(prompt, token_counter)
     answer = extract_answer(response)
 
@@ -191,7 +197,7 @@ def format_search_results(search_results: list) -> str:
     return formatted_results.strip()
 
 
-def build_prompt(query: str, search_results: list[dict]) -> str:
+def build_prompt(query: str, search_results: list) -> str:
     prompt_template = PromptTemplate(
         input_variables=["query", "context"],
         template="""
@@ -241,3 +247,41 @@ def extract_answer(response: str) -> str:
         return match.group(1).strip()
     else:
         return response.strip()
+
+
+async def filter_relevant_results(
+    query: str, search_results: list, token_counter: TokenCounter
+) -> list[dict]:
+    relevant_results = []
+    for result in search_results:
+        is_relevant = await check_result_relevance(query, result, token_counter)
+        if is_relevant:
+            relevant_results.append(result)
+    return relevant_results
+
+
+async def check_result_relevance(
+    query: str, result, token_counter: TokenCounter
+) -> bool:
+    prompt = PromptTemplate(
+        input_variables=["query", "result_content"],
+        template="""
+        Determine if the following search result is relevant to the given query about New Zealand immigration or visas.
+        Respond with only one word: 'Yes' or 'No'.
+
+        Query: {query}
+
+        Search Result:
+        {result_content}
+
+        Is this result relevant to the query?
+        """,
+    )
+    chain = prompt | chat_model
+    with get_openai_callback() as cb:
+        response = await chain.ainvoke(
+            {"query": query, "result_content": result.page_content}
+        )
+        token_counter.add_system_tokens(cb.total_tokens)
+
+    return "yes" in response.content.strip().lower()
