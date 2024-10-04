@@ -120,9 +120,7 @@ def chunk_data(raw_doc: dict, chunk_size: int = 1000, overlap: int = 100) -> lis
 
 async def encode_and_index_data(data_chunk: list[dict]):
     for doc in tqdm(data_chunk, desc="Indexing documents"):
-        doc["main_content_vector"] = embeddings.embed_query(
-            doc["main_content"]
-        ).tolist()
+        doc["main_content_vector"] = embeddings.embed_query(doc["main_content"])
         await es_client.index(index=ELASTIC_INDEX_NAME, document=doc)
 
 
