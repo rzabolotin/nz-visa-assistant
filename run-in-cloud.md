@@ -84,6 +84,3 @@ vim .env
 ```bash
  sudo /usr/local/bin/docker-compose up -d
 ```
-
-SG_ID: sg-0421e127d6c4c6264
-IP: 54.157.58.248

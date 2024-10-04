@@ -180,3 +180,17 @@ Note: The PostgreSQL data source is automatically provisioned, allowing you to i
 The queries could be found in the [queries.md](app/grafana/queries.md) file.
 
 Screenshots of the Grafana dashboard are available in the [dashboards.md](app/grafana/dashboards.md) file.
+
+## Cloud Deployment
+
+The New Zealand Visa Information Chatbot is also available for access via cloud deployment. This allows users to interact with the bot without the need for local setup.
+
+### Accessing the Cloud-Deployed Bot
+
+You can access the cloud-deployed version of the chatbot using the following links:
+
+[Chatbot Link](https://t.me/nzimmigrationbot)
+[Monitoring Dashboard](http://54.157.58.248:3000/d/bdzud0bwh6eioe/bot-dashboard?orgId=1)
+[Online logs (dozzle)](http://54.157.58.248:8080/)
+
+I provided the instructions how to deploy the application to the cloud in the [run-in-cloud.md](run-in-cloud.md) file.
